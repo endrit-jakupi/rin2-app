@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Services\NotificationService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 new class extends Component
@@ -18,6 +19,17 @@ new class extends Component
                 $user->unread_notifications_count = $notificationService->getUnreadCount($user);
             });
     }
+
+    public function impersonate(User $user): void
+    {
+        session(['impersonating_from' => auth()->id()]);
+    
+        Auth::login($user);
+    
+        request()->session()->regenerate();
+    
+        $this->redirect('/');
+    }
 };
 ?>
 
@@ -27,7 +39,9 @@ new class extends Component
     <ul>
         @foreach ($users as $user)
             <li>
-                <strong>{{ $user->name }}</strong>
+                <button type="button" wire:click="impersonate({{ $user->id }})">
+                    {{ $user->name }}
+                </button>
                 — {{ $user->email }}
                 — {{ $user->unread_notifications_count }} unread
             </li>
