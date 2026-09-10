@@ -4,6 +4,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 new class extends Component
 {
@@ -16,6 +17,8 @@ new class extends Component
     public string $recipientFilter = '';
 
     public string $userFilter = '';
+
+    public ?Notification $selectedNotification = null;
 
     public function mount(): void
     {
@@ -43,6 +46,18 @@ new class extends Component
     public function updatedUserFilter(): void
     {
         $this->loadNotifications();
+    }
+
+    public function showNotification(int $notificationId): void
+    {
+        $this->selectedNotification = Notification::query()
+            ->with('user')
+            ->findOrFail($notificationId);
+    }
+
+    public function closeNotification(): void
+    {
+        $this->selectedNotification = null;
     }
 
     private function loadNotifications(): void
@@ -160,6 +175,7 @@ new class extends Component
             <tbody>
                 @forelse ($notifications as $notification)
                     <tr
+                        wire:click="showNotification({{ $notification->id }})"
                         class="cursor-pointer border-b hover:bg-black hover:text-white"
                     >
                         <td class="px-4 py-4 font-medium">
@@ -167,7 +183,7 @@ new class extends Component
                         </td>
 
                         <td class="px-4 py-4">
-                            {{ $notification->message }}
+                            {{ Str::limit($notification->message, 80) }}
                         </td>
 
                         <td class="px-4 py-4">
@@ -191,4 +207,90 @@ new class extends Component
             </tbody>
         </table>
     </div>
+
+    @if ($selectedNotification)
+        <div
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6"
+            wire:click.self="closeNotification"
+        >
+            <div class="w-full max-w-xl rounded-2xl bg-white p-6 shadow-xl">
+                <div class="mb-6 flex items-center justify-between">
+                    <p class="text-2xl font-semibold">
+                        Notification Details
+                    </p>
+
+                    <button
+                        type="button"
+                        wire:click="closeNotification"
+                        class="cursor-pointer text-2xl text-gray-500"
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <p class="text-sm font-medium">
+                            Type
+                        </p>
+
+                        <p class="mt-1">
+                            {{ $selectedNotification->type }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium">
+                            Message
+                        </p>
+
+                        <p class="mt-1 break-words">
+                            {{ $selectedNotification->message }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium">
+                            Destination
+                        </p>
+
+                        <p class="mt-1">
+                            {{ $selectedNotification->user?->name ?? 'All users' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium">
+                            Expires
+                        </p>
+
+                        <p class="mt-1">
+                            {{ $selectedNotification->expires_at->format('Y-m-d H:i') }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-medium">
+                            Posted
+                        </p>
+
+                        <p class="mt-1">
+                            {{ $selectedNotification->created_at->format('Y-m-d H:i') }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <button
+                        type="button"
+                        wire:click="closeNotification"
+                        class="cursor-pointer rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
