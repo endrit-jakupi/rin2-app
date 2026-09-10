@@ -57,12 +57,12 @@ new class extends Component
     <button
         type="button"
         wire:click="toggle"
-        class="flex cursor-pointer items-center gap-2"
+        class="relative flex cursor-pointer items-center"
         aria-label="Notifications"
     >
-        <span class="text-xl">🔔</span>
+        <span class="text-2xl">🔔</span>
 
-        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
+        <span class="absolute right-0 top-0 z-10 flex h-5 w-5 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-blue-600 text-[10px] font-semibold text-white">
             {{ $unreadCount }}
         </span>
     </button>
