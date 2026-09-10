@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ $title ?? config('app.name') }}</title>
+    <title>{{ config('app.name', 'RIN2') }}</title>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            @auth
+                <nav class="flex items-center gap-6">
+                    <a href="/" class="text-sm font-medium no-underline hover:text-gray-600">
+                        Home
+                    </a>
 
-        @livewireStyles
-    </head>
-    <body>
+                    <a href="/users" class="text-sm font-medium no-underline hover:text-gray-600">
+                        Users
+                    </a>
+
+                    <a href="/notifications" class="text-sm font-medium no-underline hover:text-gray-600">
+                        Notifications
+                    </a>
+                </nav>
+
+                <div class="flex items-center gap-6">
+                    <span class="text-sm text-gray-600">
+                        Logged in as: {{ auth()->user()->name }}
+                    </span>
+
+                    <livewire:notification-bell />
+                </div>
+            @endauth
+
+            @guest
+                <a href="/login" class="text-sm font-medium no-underline hover:text-gray-600">
+                    Log in
+                </a>
+            @endguest
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-6 py-8">
         {{ $slot }}
-
-        @livewireScripts
-    </body>
+    </main>
+</body>
 </html>

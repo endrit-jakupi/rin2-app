@@ -1,18 +1,10 @@
 <?php
 
-use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 new class extends Component
 {
-    public int $unreadCount = 0;
-
-    public function mount(NotificationService $notificationService): void
-    {
-        $this->unreadCount = $notificationService->getUnreadCount(auth()->user());
-    }
-
     public function stopImpersonating(): void
     {
         $originalUserId = session('impersonating_from');
@@ -29,14 +21,16 @@ new class extends Component
 ?>
 
 <div>
-    <h1>Home</h1>
-
-    <a href="/notifications">
-        🔔 {{ $unreadCount }}
-    </a>
+    <p class="mb-6 text-3xl font-semibold">
+        Home
+    </p>
 
     @if (session()->has('impersonating_from'))
-        <button type="button" wire:click="stopImpersonating">
+        <button
+            type="button"
+            wire:click="stopImpersonating"
+            class="mt-2 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white cursor-pointer"
+        >
             Stop impersonating
         </button>
     @endif

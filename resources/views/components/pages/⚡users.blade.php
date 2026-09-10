@@ -23,28 +23,54 @@ new class extends Component
     public function impersonate(User $user): void
     {
         session(['impersonating_from' => auth()->id()]);
-    
+
         Auth::login($user);
-    
+
         request()->session()->regenerate();
-    
+
         $this->redirect('/');
     }
 };
 ?>
 
 <div>
-    <h1>Users</h1>
+    <p class="mb-2 text-3xl font-semibold">
+        Users
+    </p>
 
-    <ul>
-        @foreach ($users as $user)
-            <li>
-                <button type="button" wire:click="impersonate({{ $user->id }})">
-                    {{ $user->name }}
-                </button>
-                — {{ $user->email }}
-                — {{ $user->unread_notifications_count }} unread
-            </li>
-        @endforeach
-    </ul>
+    <p class="mb-6 text-sm text-gray-600">
+        Click on a user to impersonate them.
+    </p>
+
+    <table class="w-full text-left">
+        <thead>
+            <tr class="border-b">
+                <th class="px-4 py-3">Name</th>
+                <th class="px-4 py-3">Email</th>
+                <th class="px-4 py-3">Unread</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach ($users as $user)
+                <tr
+                    wire:click="impersonate({{ $user->id }})"
+                    title="Impersonate"
+                    class="cursor-pointer border-b"
+                >
+                    <td class="px-4 py-4 font-medium">
+                        {{ $user->name }}
+                    </td>
+
+                    <td class="px-4 py-4 text-gray-600">
+                        {{ $user->email }}
+                    </td>
+
+                    <td class="px-4 py-4 text-gray-600">
+                        {{ $user->unread_notifications_count }}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>

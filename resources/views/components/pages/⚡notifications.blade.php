@@ -42,7 +42,9 @@ new class extends Component
 ?>
 
 <div>
-    <h1>Notifications</h1>
+    <p class="mb-6 text-3xl font-semibold">
+        Notifications
+    </p>
 
     @forelse ($notifications as $notification)
         <div>
