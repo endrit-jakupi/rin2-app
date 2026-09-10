@@ -2,21 +2,27 @@
 
 namespace App\Services;
 
-use MessageBird\Bird;
-use MessageBird\Wire\Model\PhoneNumberLookupRequest;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberType;
+use libphonenumber\PhoneNumberUtil;
 
 class PhoneNumberService
 {
-    // Check whether the phone number is identified as a mobile number.
+    // Check whether the phone number is valid and identified as mobile.
     public function isMobile(string $phoneNumber): bool
     {
-        $bird = new Bird(config('services.bird.api_key'));
+        $phoneUtil = PhoneNumberUtil::getInstance();
 
-        $request = new PhoneNumberLookupRequest();
-        $request->setPhoneNumber($phoneNumber);
+        try {
+            $number = $phoneUtil->parse($phoneNumber);
 
-        $result = $bird->lookup->phoneNumber($request);
+            if (! $phoneUtil->isValidNumber($number)) {
+                return false;
+            }
 
-        return $result->getLineType() === 'mobile';
+            return $phoneUtil->getNumberType($number) === PhoneNumberType::MOBILE;
+        } catch (NumberParseException) {
+            return false;
+        }
     }
 }
