@@ -24,6 +24,10 @@
                     <a href="/notifications" class="text-sm font-medium no-underline hover:text-gray-600">
                         Notifications
                     </a>
+
+                    <a href="/settings" class="text-sm font-medium no-underline hover:text-gray-600">
+                        Settings
+                    </a>
                 </nav>
 
                 <div class="flex items-center gap-6">
