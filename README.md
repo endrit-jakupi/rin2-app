@@ -1,58 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Web App with Notifications
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel web application implementing user management, user impersonation, on-screen notifications, notification read tracking, notification expiration, user settings, and notification management.
 
-## About Laravel
+## Requirements
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The application was developed and tested with:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.5.10
+- Laravel 13.31.0
+- Composer 2.10.3
+- PostgreSQL 18.6
+- Node.js 20.20.0
+- npm 10.8.2
+- Livewire 4.4.4
+- Tailwind CSS 4.3.3
+- Vite 8.2.2
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+PHP 8.3 or newer is required by the installed Laravel version.
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Clone the repository
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Clone the repository and move into the project directory:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repository-url>
+cd rin2-app
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install PHP dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Install frontend dependencies
 
-## Code of Conduct
+```bash
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Create the environment file
 
-## Security Vulnerabilities
+Create the local environment file from the provided template:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+Generate the Laravel application key:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan key:generate
+```
+
+### 5. Create and configure the PostgreSQL database
+
+Create a PostgreSQL database named `rin2`.
+
+The PostgreSQL connection settings are provided below. Make sure the corresponding values are set in `.env`:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=rin2
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
+```
+
+Replace `your_database_username` and `your_database_password` with the credentials of your local PostgreSQL installation.
+
+### 6. Run the migrations and seed the users
+
+Run:
+
+```bash
+php artisan migrate --seed
+```
+
+This creates the database tables and seeds the initial users.
+
+The seeded users include the following test account:
+
+```text
+Email:    test@example.com
+Password: password
+```
+
+This account can be used to log into the application.
+
+### 7. Seed example notifications
+
+Example notifications are provided separately so that the notification functionality can be tested immediately.
+
+Run:
+
+```bash
+php artisan db:seed --class=NotificationSeeder
+```
+
+This creates:
+
+- one notification for a specific user
+- one global notification available to all users
+
+The seeded notifications expire seven days after they are created.
+
+## Running the application
+
+Open two terminals in the project directory.
+
+### Terminal 1 – Laravel
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The application will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+### Terminal 2 – Frontend assets
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+This compiles the frontend assets and automatically updates them when frontend files are changed.
+
+## Logging in
+
+Open the application in a browser:
+
+```text
+http://127.0.0.1:8000
+```
+
+Use the seeded test account:
+
+```text
+Email:    test@example.com
+Password: password
+```
+
+## Phone number validation
+
+The application uses `giggsey/libphonenumber-for-php` version 9.0.38 to validate international phone numbers and determine whether a number is classified as a mobile number.
+
+No external API key or paid phone verification service is required to run the application.
