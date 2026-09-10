@@ -25,7 +25,11 @@ new class extends Component
     {
         $this->validate([
             'email' => ['required', 'email'],
-            'phone' => ['nullable', 'string'],
+            'phone' => [
+                'nullable',
+                'string',
+                'regex:/^\+[1-9][0-9\s-]{7,18}$/',
+            ],
         ]);
 
         if ($this->phone !== null && $this->phone !== '') {
@@ -44,37 +48,47 @@ new class extends Component
             'email' => $this->email,
             'phone' => $this->phone,
         ]);
-        
+
+        session()->flash('success', 'Changes saved successfully.');
+
         $this->redirect('/settings');
     }
 };
 ?>
 
 <div>
-    <p class="mb-6 text-3xl font-semibold">
+    <p class="mb-8 text-3xl font-semibold">
         Settings
     </p>
 
-    <form wire:submit="save" class="max-w-xl space-y-6">
-        <div>
-            <label for="notificationsEnabled" class="block text-sm font-medium">
+    <form wire:submit="save" class="max-w-xl">
+
+        <div class="mb-6">
+            <label
+                for="notificationsEnabled"
+                class="block text-sm font-medium"
+            >
                 On-screen notifications
             </label>
 
-            <input
-                id="notificationsEnabled"
-                type="checkbox"
-                wire:model="notificationsEnabled"
-                class="mt-2"
-            >
+            <label class="mt-3 flex items-center gap-2">
+                <input
+                    id="notificationsEnabled"
+                    type="checkbox"
+                    wire:model="notificationsEnabled"
+                >
 
-            <span class="ml-2 text-sm text-gray-600">
-                Receive on-screen notifications
-            </span>
+                <span class="text-sm text-gray-600">
+                    Receive on-screen notifications
+                </span>
+            </label>
         </div>
 
         <div>
-            <label for="email" class="block text-sm font-medium">
+            <label
+                for="email"
+                class="block text-sm font-medium"
+            >
                 Email
             </label>
 
@@ -82,16 +96,25 @@ new class extends Component
                 id="email"
                 type="email"
                 wire:model="email"
-                class="mt-2 w-full rounded border px-3 py-2"
+                placeholder="name@example.com"
+                autocomplete="email"
+                class="mt-3 w-full rounded-full border border-gray-300 px-4 py-2 text-gray-600 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none"
             >
 
-            @error('email')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
+            <div>
+                @error('email')
+                    <p class="text-sm font-medium text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
         </div>
 
-        <div>
-            <label for="phone" class="block text-sm font-medium">
+        <div class="mt-3">
+            <label
+                for="phone"
+                class="block text-sm font-medium"
+            >
                 Phone
             </label>
 
@@ -99,17 +122,30 @@ new class extends Component
                 id="phone"
                 type="tel"
                 wire:model="phone"
-                class="mt-2 w-full rounded border px-3 py-2"
+                placeholder="+41781234567"
+                class="mt-3 w-full rounded-full border border-gray-300 px-4 py-2 text-gray-600 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none"
             >
 
-            @error('phone')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
+            <div class="mt-4">
+                @error('phone')
+                    <p class="text-sm font-medium text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
         </div>
+
+        @if (session('success'))
+            <div class="mt-4">
+                <p class="text-sm font-medium text-green-600">
+                    {{ session('success') }}
+                </p>
+            </div>
+        @endif
 
         <button
             type="submit"
-            class="cursor-pointer rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+            class="cursor-pointer rounded-full bg-blue-600 mt-4 px-4 py-2 text-sm font-semibold text-white"
         >
             Save
         </button>
