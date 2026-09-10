@@ -30,38 +30,64 @@ new class extends Component
 ?>
 
 <div>
-    <h1>Login</h1>
+    <p class="mb-8 text-3xl font-semibold">
+        Login
+    </p>
 
-    <form wire:submit="login">
-        <div>
-            <label for="email">Email</label>
+    <form wire:submit="login" class="max-w-xl">
+
+        <div class="mb-6">
+            <label
+                for="email"
+                class="block text-sm font-medium"
+            >
+                Email
+            </label>
+
             <input
                 id="email"
                 type="email"
                 wire:model="email"
                 autocomplete="email"
+                placeholder="name@example.com"
+                class="mt-3 w-full rounded-full border border-gray-300 px-4 py-2 text-gray-600 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none"
             >
 
             @error('email')
-                <span>{{ $message }}</span>
+                <p class="mt-2 text-sm font-medium text-red-600">
+                    {{ $message }}
+                </p>
             @enderror
         </div>
 
-        <div>
-            <label for="password">Password</label>
+        <div class="mb-6">
+            <label
+                for="password"
+                class="block text-sm font-medium"
+            >
+                Password
+            </label>
+
             <input
                 id="password"
                 type="password"
                 wire:model="password"
                 autocomplete="current-password"
+                placeholder="Enter password"
+                class="mt-3 w-full rounded-full border border-gray-300 px-4 py-2 text-gray-600 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none"
             >
 
             @error('password')
-                <span>{{ $message }}</span>
+                <p class="mt-2 text-sm font-medium text-red-600">
+                    {{ $message }}
+                </p>
             @enderror
         </div>
 
-        <button type="submit">
+        <button
+            type="submit"
+            class="cursor-pointer rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+        >
             Login
         </button>
     </form>

@@ -10,7 +10,7 @@
 </head>
 <body class="bg-white text-gray-900">
     <header class="bg-white">
-        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-8 border-b border-gray-500">
             @auth
                 <nav class="flex items-center gap-6">
                     <a href="/" class="text-sm font-medium no-underline hover:text-gray-600">
@@ -44,12 +44,6 @@
                     @endif
                 </div>
             @endauth
-
-            @guest
-                <a href="/login" class="text-sm font-medium no-underline hover:text-gray-600">
-                    Log in
-                </a>
-            @endguest
         </div>
     </header>
 

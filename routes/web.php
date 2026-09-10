@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::livewire('/login', 'pages.login');
+Route::livewire('/login', 'pages.login')->name('login');
 
 Route::livewire('/users', 'pages.users')->middleware('auth');
 
