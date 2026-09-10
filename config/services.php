@@ -34,9 +34,5 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-    
-    'bird' => [
-    'api_key' => env('BIRD_API_KEY'),
-    ],
 
 ];
