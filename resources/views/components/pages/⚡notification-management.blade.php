@@ -73,6 +73,13 @@ new class extends Component
         Notification Management
     </p>
 
+    <a
+        href="/notification-management/create"
+        class="mb-6 inline-block cursor-pointer rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white no-underline"
+    >
+        Post notification
+    </a>
+
     <div class="mb-6 flex gap-4">
         <div>
             <label

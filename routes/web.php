@@ -10,6 +10,9 @@ Route::livewire('/notifications', 'pages.notifications')->middleware('auth');
 
 Route::livewire('/notification-management', 'pages.notification-management')->middleware('auth');
 
+Route::livewire('/notification-management/create', 'pages.post-notification')
+    ->middleware('auth');
+
 Route::livewire('/settings', 'pages.settings')->middleware('auth');
 
 Route::livewire('/', 'pages.home')->middleware('auth');
