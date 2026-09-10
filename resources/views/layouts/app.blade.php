@@ -13,31 +13,16 @@
         <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-8 border-b border-gray-500">
             @auth
                 <nav class="flex items-center gap-6">
-                    <a href="/" class="text-sm font-medium no-underline hover:text-gray-600">
-                        Home
-                    </a>
-
-                    <a href="/users" class="text-sm font-medium no-underline hover:text-gray-600">
-                        Users
-                    </a>
-
-                    <a href="/notifications" class="text-sm font-medium no-underline hover:text-gray-600">
-                        Notifications
-                    </a>
-
-                    <a href="/settings" class="text-sm font-medium no-underline hover:text-gray-600">
-                        Settings
-                    </a>
-
-                    <a href="/notification-management" class="text-sm font-medium no-underline hover:text-gray-600">
-                        Notification Management
-                    </a>
+                    <a href="/" class="text-sm font-medium no-underline hover:text-gray-600">Home</a>
+                    <a href="/users" class="text-sm font-medium no-underline hover:text-gray-600">Users</a>
+                    <a href="/notifications" class="text-sm font-medium no-underline hover:text-gray-600">Notifications</a>
+                    <a href="/notification-management" class="text-sm font-medium no-underline hover:text-gray-600">Notification Management</a>
                 </nav>
 
                 <div class="flex items-center gap-6">
-                    <span class="text-sm text-gray-600">
-                        Logged in as: {{ auth()->user()->name }}
-                    </span>
+                    <a href="/settings" class="text-sm font-medium no-underline hover:text-gray-600">
+                        Settings
+                    </a>
 
                     @if (auth()->user()->notifications_enabled)
                         <livewire:notification-bell />

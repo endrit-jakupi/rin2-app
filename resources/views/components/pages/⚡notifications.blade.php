@@ -31,6 +31,8 @@ new class extends Component
             Auth::user()
         );
 
+        $this->dispatch('notification-read');
+
         $this->loadNotifications($notificationService);
 
         $this->selectedNotification = $this->notifications

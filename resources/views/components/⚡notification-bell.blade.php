@@ -3,6 +3,7 @@
 use App\Models\Notification;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new class extends Component
@@ -50,6 +51,15 @@ new class extends Component
             Auth::user()
         );
     }
+
+    #[On('notification-read')]
+    public function refreshUnreadCount(
+        NotificationService $notificationService
+    ): void {
+        $this->unreadCount = $notificationService->getUnreadCount(
+            Auth::user()
+        );
+    }
 };
 ?>
 
@@ -68,34 +78,58 @@ new class extends Component
     </button>
 
     @if ($open)
-        <div class="absolute right-0 z-10 mt-2 w-96 rounded-lg bg-white p-5 shadow-lg">
-            <h2 class="mb-3 font-semibold">Unread notifications</h2>
+        <div class="absolute right-0 z-10 mt-2 w-80 rounded-lg bg-white p-4 shadow-lg">
+            <p class="mb-3 text-sm font-semibold">
+                Unread notifications
+            </p>
 
-            @forelse ($notifications as $notification)
-                <div class="border-b py-3 last:border-b-0">
-                    <button
-                        type="button"
-                        wire:click="markAsRead({{ $notification->id }})"
-                        class="w-full text-left"
-                    >
-                        <strong class="text-sm">
-                            {{ $notification->type }}
-                        </strong>
+            <div class="max-h-[400px] overflow-y-auto overflow-x-visible px-1">
+                @forelse ($notifications as $notification)
+                    <div class="border-b border-gray-200 last:border-b-0">
+                        <button
+                            type="button"
+                            wire:click="markAsRead({{ $notification->id }})"
+                            class="relative w-full cursor-pointer py-3 text-left text-black transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.03]"
+                        >
+                            <div class="flex gap-3">
+                                <div class="flex shrink-0 items-start pt-1 text-lg">
+                                    @if ($notification->type === 'system')
+                                        ⚙️
+                                    @elseif ($notification->type === 'marketing')
+                                        📣
+                                    @elseif ($notification->type === 'invoices')
+                                        🧾
+                                    @endif
+                                </div>
 
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $notification->message }}
-                        </p>
-                    </button>
-                </div>
-            @empty
-                <p class="text-sm text-gray-500">
-                    No unread notifications.
-                </p>
-            @endforelse
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <strong class="text-xs">
+                                            {{ $notification->type }}
+                                        </strong>
+
+                                        <span class="shrink-0 text-[11px] text-black">
+                                            {{ $notification->created_at->format('d.m.Y') }}
+                                        </span>
+                                    </div>
+
+                                    <p class="mt-1 text-xs leading-5">
+                                        {{ $notification->message }}
+                                    </p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                @empty
+                    <p class="text-xs text-gray-500">
+                        No unread notifications.
+                    </p>
+                @endforelse
+            </div>
 
             <a
                 href="/notifications"
-                class="mt-3 block text-sm font-medium hover:underline"
+                class="mt-3 block text-xs font-medium hover:underline"
             >
                 View all notifications
             </a>
