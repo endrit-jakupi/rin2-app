@@ -44,6 +44,8 @@ new class extends Component
             'email' => $this->email,
             'phone' => $this->phone,
         ]);
+        
+        $this->redirect('/settings');
     }
 };
 ?>

@@ -35,7 +35,9 @@
                         Logged in as: {{ auth()->user()->name }}
                     </span>
 
-                    <livewire:notification-bell />
+                    @if (auth()->user()->notifications_enabled)
+                        <livewire:notification-bell />
+                    @endif
                 </div>
             @endauth
 
