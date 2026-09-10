@@ -42,9 +42,9 @@ new class extends Component
         Click on a user to impersonate them.
     </p>
 
-    <table class="w-full text-left">
+    <table class="w-full border-separate border-spacing-y-2 text-left">
         <thead>
-            <tr class="border-b">
+            <tr>
                 <th class="px-4 py-3">Name</th>
                 <th class="px-4 py-3">Email</th>
                 <th class="px-4 py-3">Unread</th>
@@ -56,17 +56,17 @@ new class extends Component
                 <tr
                     wire:click="impersonate({{ $user->id }})"
                     title="Impersonate"
-                    class="cursor-pointer border-b hover:bg-black hover:text-white"
+                    class="cursor-pointer transition-transform duration-200 ease-out hover:relative hover:z-10 hover:scale-[1.03]"
                 >
-                    <td class="px-4 py-4 font-medium">
+                    <td class="border-b border-gray-200 px-4 py-4 font-medium">
                         {{ $user->name }}
                     </td>
 
-                    <td class="px-4 py-4">
+                    <td class="border-b border-gray-200 px-4 py-4">
                         {{ $user->email }}
                     </td>
 
-                    <td class="px-4 py-4">
+                    <td class="border-b border-gray-200 px-4 py-4">
                         {{ $user->unread_notifications_count }}
                     </td>
                 </tr>

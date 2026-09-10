@@ -3,8 +3,8 @@
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Component;
 
 new class extends Component
 {
@@ -162,9 +162,9 @@ new class extends Component
     </div>
 
     <div class="w-full">
-        <table class="w-full text-left">
+        <table class="w-full border-separate border-spacing-y-2 text-left">
             <thead>
-                <tr class="border-b">
+                <tr>
                     <th class="px-4 py-3">Type</th>
                     <th class="px-4 py-3">Message</th>
                     <th class="px-4 py-3">Destination</th>
@@ -176,21 +176,29 @@ new class extends Component
                 @forelse ($notifications as $notification)
                     <tr
                         wire:click="showNotification({{ $notification->id }})"
-                        class="cursor-pointer border-b hover:bg-black hover:text-white"
+                        class="cursor-pointer transition-transform duration-200 ease-out hover:relative hover:z-10 hover:scale-[1.03]"
                     >
-                        <td class="px-4 py-4 font-medium">
+                        <td class="border-b border-gray-200 px-4 py-4 font-medium">
+                            @if ($notification->type === 'system')
+                                ⚙️
+                            @elseif ($notification->type === 'marketing')
+                                📣
+                            @elseif ($notification->type === 'invoices')
+                                🧾
+                            @endif
+
                             {{ $notification->type }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="border-b border-gray-200 px-4 py-4">
                             {{ Str::limit($notification->message, 80) }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="border-b border-gray-200 px-4 py-4">
                             {{ $notification->user?->name ?? 'All users' }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="border-b border-gray-200 px-4 py-4">
                             {{ $notification->expires_at->format('Y-m-d H:i') }}
                         </td>
                     </tr>
