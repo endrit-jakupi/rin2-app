@@ -96,69 +96,168 @@ new class extends Component
     </a>
 
     <div class="mb-6 flex gap-4">
-        <div>
-            <label
-                for="typeFilter"
-                class="block text-sm font-medium"
-            >
+        {{-- Type filter --}}
+        <div
+            x-data="{ open: false }"
+            @mouseenter="open = true"
+            @mouseleave="open = false"
+            class="relative"
+        >
+            <label class="block text-sm font-medium">
                 Type
             </label>
 
-            <select
-                id="typeFilter"
-                wire:model.live="typeFilter"
-                class="mt-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm"
+            <button
+                type="button"
+                class="mt-2 flex cursor-pointer items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm"
             >
-                <option value="">All types</option>
-                <option value="marketing">Marketing</option>
-                <option value="invoices">Invoices</option>
-                <option value="system">System</option>
-            </select>
+                <span>
+                    @if ($typeFilter === '')
+                        All types
+                    @elseif ($typeFilter === 'marketing')
+                        Marketing
+                    @elseif ($typeFilter === 'invoices')
+                        Invoices
+                    @elseif ($typeFilter === 'system')
+                        System
+                    @endif
+                </span>
+
+                <span class="text-xs">
+                    ▾
+                </span>
+            </button>
+
+            <div
+                x-show="open"
+                x-transition
+                class="absolute left-0 top-full z-30 pt-1"
+            >
+                <div class="w-48 rounded-xl border border-gray-200 bg-white p-1 shadow-lg">
+                    <button
+                        type="button"
+                        wire:click="$set('typeFilter', '')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        All types
+                    </button>
+
+                    <button
+                        type="button"
+                        wire:click="$set('typeFilter', 'marketing')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        Marketing
+                    </button>
+
+                    <button
+                        type="button"
+                        wire:click="$set('typeFilter', 'invoices')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        Invoices
+                    </button>
+
+                    <button
+                        type="button"
+                        wire:click="$set('typeFilter', 'system')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        System
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <label
-                for="recipientFilter"
-                class="block text-sm font-medium"
-            >
+        <div
+            x-data="{ open: false, specificOpen: false }"
+            @mouseenter="open = true"
+            @mouseleave="open = false; specificOpen = false"
+            class="relative"
+        >
+            <label class="block text-sm font-medium">
                 Recipient
             </label>
 
-            <select
-                id="recipientFilter"
-                wire:model.live="recipientFilter"
-                class="mt-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm"
+            <button
+                type="button"
+                class="mt-2 flex cursor-pointer items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm"
             >
-                <option value="">All recipients</option>
-                <option value="global">Global notifications</option>
-                <option value="specific">Specific user</option>
-            </select>
-        </div>
+                <span>
+                    @if ($recipientFilter === 'specific' && $userFilter !== '')
+                        {{ $users->firstWhere('id', $userFilter)?->name }}
+                    @elseif ($recipientFilter === 'global')
+                        Global notifications
+                    @else
+                        All recipients
+                    @endif
+                </span>
 
-        @if ($recipientFilter === 'specific')
-            <div>
-                <label
-                    for="userFilter"
-                    class="block text-sm font-medium"
-                >
-                    User
-                </label>
+                <span class="text-xs">
+                    ▾
+                </span>
+            </button>
 
-                <select
-                    id="userFilter"
-                    wire:model.live="userFilter"
-                    class="mt-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm"
-                >
-                    <option value="">All specific users</option>
+            <div
+                x-show="open"
+                x-transition
+                class="absolute left-0 top-full z-30 pt-1"
+            >
+                <div class="w-52 rounded-xl border border-gray-200 bg-white p-1 shadow-lg">
+                    <button
+                        type="button"
+                        wire:click="$set('recipientFilter', '')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        All recipients
+                    </button>
 
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}">
-                            {{ $user->name }}
-                        </option>
-                    @endforeach
-                </select>
+                    <button
+                        type="button"
+                        wire:click="$set('recipientFilter', 'global')"
+                        class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                    >
+                        Global notifications
+                    </button>
+
+                    <div
+                        class="relative"
+                        @mouseenter="specificOpen = true"
+                    >
+                        <button
+                            type="button"
+                            class="flex w-full cursor-pointer items-center justify-between rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                        >
+                            <span>Specific user</span>
+
+                            <span class="text-xs">
+                                ▸
+                            </span>
+                        </button>
+
+                        <div
+                            x-show="specificOpen"
+                            x-transition
+                            class="absolute left-full top-0 z-40 w-56 pl-2"
+                        >
+                            <div class="rounded-xl border border-gray-200 bg-white p-1 shadow-lg">
+                                <div class="max-h-52 overflow-y-auto">
+                                    @foreach ($users as $user)
+                                        <button
+                                            type="button"
+                                            wire:click="$set('recipientFilter', 'specific'); $set('userFilter', '{{ $user->id }}')"
+                                            class="block w-full cursor-pointer rounded-lg px-4 py-2.5 text-left text-sm hover:bg-gray-100"
+                                        >
+                                            {{ $user->name }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endif
+        </div>
     </div>
 
     <div class="w-full">
