@@ -1,6 +1,6 @@
 # Web App with Notifications
 
-A Laravel web application implementing user management, user impersonation, on-screen notifications, notification read tracking, notification expiration, user settings, and notification management.
+A Laravel web application for managing users and delivering on-screen notifications. Users can view their notifications, track unread messages, mark notifications as read, and manage their notification preferences and contact information. The application also provides notification management features for creating, filtering, and viewing notifications targeted at specific users or all users.
 
 ## Requirements
 
@@ -156,3 +156,10 @@ Password: password
 The application uses `giggsey/libphonenumber-for-php` version 9.0.38 to validate international phone numbers and determine whether a number is classified as a mobile number.
 
 No external API key or paid phone verification service is required to run the application.
+
+## Documentation
+
+Additional project documentation is available in the `docs/` directory:
+
+- [`architecture.md`](docs/architecture.md) — application structure and key design decisions.
+- [`database-erd.pdf`](docs/database-erd.pdf) — entity-relationship diagram of the application database.
